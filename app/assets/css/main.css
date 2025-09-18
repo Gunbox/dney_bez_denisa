@@ -1,0 +1,28 @@
+@import "tailwindcss" theme(static);
+@import "@nuxt/ui";
+
+@theme {
+  --font-sans: 'Ubuntu Mono', sans-serif;
+  --ui-header-height: 3.5rem;
+}
+
+@layer utilities {
+  .v-enter-active,
+  .v-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .v-enter-from,
+  .v-leave-to {
+    opacity: 0;
+  }
+}
+
+:root {
+  --ui-primary: var(--ui-color-primary-500);
+}
+
+.dark {
+  --ui-primary: var(--ui-color-primary-500);
+}
+
