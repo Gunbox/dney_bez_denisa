@@ -84,7 +84,7 @@ onMounted(() => {
       class="fixed inset-0 flex flex-col items-center justify-center gap-6 bg-black text-white select-none p-12 text-shadow-sm"
     >
       <NuxtImg
-        src="/bg.jpeg"
+        src="bg.jpeg"
         height="2000"
         width="3000"
         loading="lazy"
