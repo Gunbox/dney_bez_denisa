@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 
-const startDate = new Date("2025-09-18");
+const startDate = new Date("2025-09-18 18:00");
+const diff = ref(0);
 
 const days = ref(0);
 const hours = ref(0);
@@ -10,14 +11,16 @@ const seconds = ref(0);
 
 function updateCounter() {
   const now = new Date();
-  let diff = Math.max(0, now.getTime() - startDate.getTime());
-  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-  diff -= d * (1000 * 60 * 60 * 24);
-  const h = Math.floor(diff / (1000 * 60 * 60));
-  diff -= h * (1000 * 60 * 60);
-  const m = Math.floor(diff / (1000 * 60));
-  diff -= m * (1000 * 60);
-  const s = Math.floor(diff / 1000);
+  diff.value = Math.max(0, now.getTime() - startDate.getTime());
+  let _diff = Number(`${diff.value || 0}`);
+
+  const d = Math.floor(_diff / (1000 * 60 * 60 * 24));
+  _diff -= d * (1000 * 60 * 60 * 24);
+  const h = Math.floor(_diff / (1000 * 60 * 60));
+  _diff -= h * (1000 * 60 * 60);
+  const m = Math.floor(_diff / (1000 * 60));
+  _diff -= m * (1000 * 60);
+  const s = Math.floor(_diff / 1000);
   days.value = d;
   hours.value = h;
   minutes.value = m;
@@ -34,7 +37,6 @@ const farewellPhrasesList = [
   "Пусть удача всегда идёт рядом с тобой!",
   "Пусть каждый день приносит радость и вдохновение!",
   "Пусть сбудутся даже самые смелые мечты!",
-  "Пусть жизнь будет яркой, как фейерверк в самый главный день!",
   "Пусть счастье стучится в твою дверь каждый день!",
   "Пусть ветер перемен дует в твою пользу!",
   "Пусть любовь, радость и тепло окружают тебя всегда!",
@@ -45,9 +47,7 @@ const farewellPhrasesList = [
   "Ты — часть нашей истории. Спасибо за всё, что ты сделал!",
   "Команда уже не такая без тебя — но мы рады за твой новый путь!",
   "Ты уходишь, но остаёшься в наших сердцах 💙",
-  "🌟 Дополнительные креативные/неформальные варианты:",
   "Не пропадай! Иногда заглядывай — кофе за наш счёт 😉",
-  "Ты летишь выше — мы с земли машем и болеем за тебя!",
   "Спасибо за твою энергию — ты заряжал всех вокруг!",
   "Ждём фото с нового места — покажи, как ты там зажигаешь!",
   "Если вдруг понадобится поддержка — мы всегда на связи!",
@@ -56,6 +56,8 @@ const farewellPhrasesList = [
   "Ты сделал нас лучше — спасибо за это!",
   "Пусть новый офис скажет: “Ого, вот это профессионал!”",
   "Не забывай — ты всегда можешь вернуться (двери открыты!) ❤️",
+  "Хапни вялого джунджурика",
+  "Э! Чо ты?!",
 ];
 
 const farewellPhrase = ref("");
@@ -81,7 +83,7 @@ onMounted(() => {
 <template>
   <UApp>
     <div
-      class="fixed inset-0 flex flex-col items-center justify-center gap-6 bg-black text-white select-none p-12 text-shadow-sm"
+      class="fixed inset-0 flex flex-col items-center justify-center gap-6 bg-black text-white select-none p-12 text-shadow-sm text-center"
     >
       <NuxtImg
         src="bg.jpeg"
@@ -90,25 +92,33 @@ onMounted(() => {
         loading="lazy"
         class="absolute inset-0 object-cover w-full h-full -z-10 blur-sm brightness-50"
       />
-      <div class="text-2xl">Прошло времени без Дениса</div>
+      <Transition mode="out-in" appear>
+        <div class="text-2xl" v-if="showTimer">
+          <span v-if="diff === 0">Время ещё не пришло</span>
+          <span v-else>Прошло времени без Дениса</span>
+        </div>
+      </Transition>
       <Transition mode="out-in">
-        <div v-if="showTimer" class="flex flex-col items-center gap-4">
-          <div class="text-5xl text-center">
-            <span v-if="days">{{ days }} дн</span>
-            {{ hours.toString().padStart(2, "0") }} ч
-            {{ minutes.toString().padStart(2, "0") }} мин
-            {{ seconds.toString().padStart(2, "0") }} сек
-          </div>
-          <div
-            class="flex flex-col items-center gap-2 italic text-gray-400 cursor-pointer"
-            @click="pickRandomPhrase"
-          >
-            <Transition mode="out-in">
-              <div class="text-xl hover:text-white" :key="farewellPhrase">
-                {{ farewellPhrase }}
-              </div>
-            </Transition>
-            <div class="text-sm self-end">Любящая команда</div>
+        <div v-if="showTimer">
+          <div v-if="diff === 0">...</div>
+          <div v-else class="flex flex-col items-center gap-4">
+            <div class="text-5xl">
+              <span v-if="days">{{ days }} дн</span>
+              {{ hours.toString().padStart(2, "0") }} ч
+              {{ minutes.toString().padStart(2, "0") }} мин
+              {{ seconds.toString().padStart(2, "0") }} сек
+            </div>
+            <div
+              class="flex flex-col items-center gap-2 italic text-gray-400 cursor-pointer"
+              @click="pickRandomPhrase"
+            >
+              <Transition mode="out-in">
+                <div class="text-xl hover:text-white" :key="farewellPhrase">
+                  «{{ farewellPhrase }}»
+                </div>
+              </Transition>
+              <div class="text-sm self-end">Любящая команда</div>
+            </div>
           </div>
         </div>
         <div v-else>
