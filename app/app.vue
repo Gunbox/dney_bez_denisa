@@ -81,11 +81,12 @@ onMounted(() => {
 <template>
   <UApp>
     <div
-      class="fixed inset-0 flex flex-col items-center justify-center gap-6 bg-black text-white select-none p-12 text-shadow-sm
-"
+      class="fixed inset-0 flex flex-col items-center justify-center gap-6 bg-black text-white select-none p-12 text-shadow-sm"
     >
       <NuxtImg
         src="/bg.jpeg"
+        height="2000"
+        width="3000"
         loading="lazy"
         class="absolute inset-0 object-cover w-full h-full -z-10 blur-sm brightness-50"
       />
@@ -93,7 +94,8 @@ onMounted(() => {
       <Transition mode="out-in">
         <div v-if="showTimer" class="flex flex-col items-center gap-4">
           <div class="text-5xl text-center">
-            <span v-if="days">{{ days }} дн</span> {{ hours.toString().padStart(2, "0") }} ч
+            <span v-if="days">{{ days }} дн</span>
+            {{ hours.toString().padStart(2, "0") }} ч
             {{ minutes.toString().padStart(2, "0") }} мин
             {{ seconds.toString().padStart(2, "0") }} сек
           </div>
