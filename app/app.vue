@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 
-const startDate = new Date("2025-09-18 18:00");
+const startDate = new Date("2025-09-19 12:00");
 const diff = ref(0);
 
 const days = ref(0);
